@@ -1,0 +1,33 @@
+{
+    "classTimes": [
+        {
+            "index":"第一二节",
+            "start_time":"08:00",
+            "end_time":"09:50"
+        },
+        {
+            "index":"第三四节",
+            "start_time":"10:10",
+            "end_time":"12:00"
+        },        
+        {
+            "index":"第五六节",
+            "start_time":"14:00",
+            "end_time":"15:50"
+        },        
+        {
+            "index":"第七八节",
+            "start_time":"16:00",
+            "end_time":"17:50"
+        },
+        {
+            "index":"第九十11节",
+            "start_time":"19:00",
+            "end_time":"21:50"
+        }
+    ],
+    "weekConfig": {
+        "first_week":"2018-09-03",
+        "total_week":19
+    }
+}
