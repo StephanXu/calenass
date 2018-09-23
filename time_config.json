@@ -1,4 +1,8 @@
 {
+    "calendarConfig":{
+        "name":"课表",
+        "timezone":"Asia/Shanghai"
+    },
     "classTimes": [
         {
             "index":"第一二节",

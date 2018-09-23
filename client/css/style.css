@@ -1,0 +1,147 @@
+a:hover,
+a:focus {
+    text-decoration: none;
+    outline: none;
+}
+
+#accordion .panel {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    margin-bottom: -5px;
+}
+
+#accordion .panel-heading {
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    text-align: center;
+}
+
+#accordion .panel-title a {
+    display: block;
+    padding: 25px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background: #333;
+    border-bottom: 1px solid #4a4a4a;
+    position: relative;
+    transition: all 0.5s ease 0s;
+    font-family: "思源黑体Normal";
+}
+
+#accordion .panel-title a:hover {
+    background: #4a4a4a;
+}
+
+#accordion .panel-title a:after,
+#accordion .panel-title a.collapsed:after {
+    content: "\f067";
+    font-family: FontAwesome;
+    font-size: 15px;
+    font-weight: 200;
+    position: absolute;
+    top: 25px;
+    left: 15px;
+    transform: rotate(135deg);
+    transition: all 0.5s ease 0s;
+}
+
+#accordion .panel-title a.collapsed:after {
+    transform: rotate(0deg);
+}
+
+#accordion .panel-body {
+    background: #167ea0;
+    padding: 0 0 0 40px;
+    border: none;
+    position: relative;
+}
+
+#accordion .panel-body p {
+    font-family: 思源黑体Normal;
+    font-size: 14px;
+    color: #fff;
+    line-height: 25px;
+    background: #3296b7;
+    padding: 30px;
+    margin: 0;
+}
+
+#accordion .panel-body form {
+    font-size: 14px;
+    color: #fff;
+    line-height: 25px;
+    background: #3296b7;
+    padding: 30px;
+    margin: 0;
+}
+
+#accordion .panel-collapse .panel-body p {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.5s ease-in-out 0s;
+}
+
+#accordion .panel-collapse.in .panel-body p {
+    opacity: 1;
+    transform: scale(1);
+}
+
+#accordion .panel-collapse .panel-body form {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.5s ease-in-out 0s;
+}
+
+#accordion .panel-collapse.in .panel-body form {
+    opacity: 1;
+    transform: scale(1);
+}
+
+        @font-face {
+            font-family: 文泉驿等宽微米黑;
+            src: url('font/wqy-microhei.ttc');
+        }
+
+        @font-face {
+            font-family: Gotham Black;
+            src: url('font/Gotham-Black.ttf');
+        }
+
+        @font-face {
+            font-family: 思源黑体Heavy;
+            src: url('font/SourceHanSansCN-Heavy.otf');
+        }
+
+        @font-face {
+            font-family: 思源黑体Bold;
+            src: url('font/SourceHanSansCN-Bold.otf');
+        }
+
+        @font-face {
+            font-family: 思源黑体Normal;
+            src: url('font/SourceHanSansCN-Normal.otf');
+        }
+
+button.add_courseItem{
+    width:100%;
+
+}
+h1.label_addCourse{
+    color:#fbfbfb;
+    font-size: 3em;
+    font-family: 思源黑体Heavy;
+}
+
+label.labelForm{
+    color:#fbfbfb;
+}
+
+.ItemEditFade-enter-active, .ItemEditFade-leave-active {
+    transition: opacity .5s;
+}
+.ItemEditFade-enter, .ItemEditFade-leave-to {
+    opacity: 0;
+}

@@ -1,18 +1,11 @@
 import datetime
 import pytz
-print(datetime.datetime.now())
+import classIntoCalendar
+import sys
 
-a = datetime.datetime.strptime('2018-09-10 12:00','%Y-%m-%d %H:%M')
+def main(var):
+    print(var)
+    pass
 
-print(a)
-
-b = datetime.datetime.strptime('2018-09-10 12:00','%Y-%m-%d %H:%M')
-
-c = b.astimezone(tz=pytz.timezone('Asia/Shanghai'))
-
-print(c)
-
-d = c.astimezone(tz=pytz.timezone('UTC'))
-
-print(d)
-
+if __name__=='__main__':
+    main(sys.argv[1])
