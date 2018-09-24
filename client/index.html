@@ -21,7 +21,7 @@
 
     <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
     <style type="text/css">
-        
+
     </style>
 
 </head>
@@ -60,7 +60,7 @@
                                     <p>在第<a v-for="wkday in sub.week" style="color:#ffffff">{{wkday}} </a>周的 {{
                                         sub.wkday }}<br />
                                         <a style="color:#ffffff">{{ sub.time }} 于 {{ sub.pos }}</a><br />
-                                        <a style="color:#ffffff">由 {{sub.lecturer}} 老师讲授</a>
+                                        <a style="color:#ffffff">{{sub.more}}</a>
                                     </p>
                                 </div>
                                 <div>
@@ -72,17 +72,32 @@
                                                 <hr />
                                                 <h1 class="label_addCourse">新增课程</h1>
                                                 <div class="form_group">
-                                                    <input type="hidden" class="form-control" id="input_courseAlias" :value="coursesItem.alias">
+                                                    <input type="hidden" class="form-control" id="input_courseAlias"
+                                                        :value="coursesItem.alias">
                                                 </div>
                                                 <div class="form_group">
                                                     <label for="input_courseTime" class="control-label labelForm">上课时间：</label>
-                                                    <input type="text" class="form-control" id="input_courseTime"
-                                                        placeholder="第一二节">
+                                                    <select id="input_courseTime" class="form-control">
+                                                        <option v-for="ct_item in all_configs.conf.classTimes" :value="ct_item.index">
+                                                            {{ct_item.index}}
+                                                        </option>
+                                                    </select>
+                                                    <!-- <input type="text" class="form-control" id="input_courseTime"
+                                                        placeholder="第一二节"> -->
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="input_courseWkd" class="control-label labelForm">上课日：</label>
-                                                    <input type="text" class="form-control" id="input_courseWkd"
-                                                        placeholder="星期一">
+                                                    <select id="input_courseWkd" class="form-control">
+                                                        <option value="星期一">星期一</option>
+                                                        <option value="星期二">星期二</option>
+                                                        <option value="星期三">星期三</option>
+                                                        <option value="星期四">星期四</option>
+                                                        <option value="星期五">星期五</option>
+                                                        <option value="星期六">星期六</option>
+                                                        <option value="星期日">星期日</option>
+                                                    </select>
+                                                    <!-- <input type="text" class="form-control" id="input_courseWkd"
+                                                        placeholder="星期一"> -->
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="input_courseWeeks" class="control-label labelForm">周数：</label>
@@ -99,6 +114,7 @@
                                                     <input type="text" class="form-control" id="input_courseMore"
                                                         placeholder="由 张三 老师讲授">
                                                 </div>
+                                                <p v-if="form_tip.length>0">{{form_tip}}</p>
                                                 <div>
                                                     <a type="button" class="col-xs-6 button button-action button-block"
                                                         v-on:click="addCourseItem">添加</a>
@@ -122,11 +138,14 @@
         var vm = new Vue({
             el: '#app',
             data: {
+                all_configs: new Object(),
                 courses: [],
                 showItemEdit: -1,
+                form_tip: "",
             },
             computed: {
                 courses_sort: function () {
+                    this.courses = this.all_configs.courses;
                     var filter_course = [];
                     for (course in this.courses) {
                         var flag_exist = false;
@@ -141,42 +160,65 @@
                         }
                     }
                     return filter_course;
-                }
+                },
+
             },
             methods: {
                 addCourseItem: function (event) {
-
                     var courseInfo = new Object();
-                    courseInfo.alias = document.getElementById('input_courseAlias').value;
+                    courseInfo.name = document.getElementById('input_courseAlias').value;
                     courseInfo.time = document.getElementById('input_courseTime').value;
-                    courseInfo.wkd = document.getElementById('input_courseWkd').value;
-                    courseInfo.weeks = document.getElementById('input_courseWeeks').value;
+                    courseInfo.wkday = document.getElementById('input_courseWkd').value;
+                    courseInfo.week = document.getElementById('input_courseWeeks').value;
                     courseInfo.pos = document.getElementById('input_coursePos').value;
                     courseInfo.more = document.getElementById('input_courseMore').value;
 
                     //check arguments 
-                    if (courseInfo.alias.length<1 || courseInfo.time.length<1 || courseInfo.wkd.length<1 || courseInfo.weeks.length<1 || courseInfo.pos.length<1 || courseInfo.more.length<1){
-                        //argument error
+
+                    if (courseInfo.name.length < 1 || courseInfo.week.length < 1) {
+                        this.form_tip = '信息填写错误';
+                        return;
                     }
-                    console.log(courseInfo);
+
+                    try {
+                        var wk = new Array();
+                        var arrWeeksGroup = courseInfo.week.split(',');
+                        for (i in arrWeeksGroup) {
+                            if (arrWeeksGroup[i].indexOf('-') > -1) {
+                                var beginNum = eval(arrWeeksGroup[i].split('-')[0]);
+                                var endNum = eval(arrWeeksGroup[i].split('-')[1]);
+                                for (var n = beginNum; n <= endNum; ++n) {
+                                    wk.push(n);
+                                }
+                            } else {
+                                wk.push(eval(arrWeeksGroup[i]));
+                            }
+                        }
+                    } catch (err) {
+                        this.form_tip = '周数错误';
+                        return;
+                    }
+
+                    courseInfo.week = wk;
+
+                    this.courses.push(courseInfo);
+
+                    this.showItemEdit = -1;
                 },
             }
         });
         var all_configs = JSON.parse(document.cookie);
-        // console.log(all_configs);
+        vm.all_configs = all_configs;
         var configs = all_configs.conf;
-        var courses = all_configs.courses;
-
-        vm.courses = courses;
 
         $(function () {
-            
+
             $.getJSON('all_configs.json', function (data) {
                 //  for (item in data) {
-                    //  courses.push(data[item]);
+                //  courses.push(data[item]);
                 // }
-                // document.cookie = JSON.stringify(data);
-                // console.log(document.cookie);
+                //document.cookie = JSON.stringify(data);
+                //console.log(document.cookie);
             });
         })
 

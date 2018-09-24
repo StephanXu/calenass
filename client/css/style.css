@@ -100,30 +100,30 @@ a:focus {
     transform: scale(1);
 }
 
-        @font-face {
-            font-family: 文泉驿等宽微米黑;
-            src: url('font/wqy-microhei.ttc');
-        }
+@font-face {
+    font-family: 文泉驿等宽微米黑;
+    src: url('../font/wqy-microhei.ttc');
+}
 
-        @font-face {
-            font-family: Gotham Black;
-            src: url('font/Gotham-Black.ttf');
-        }
+@font-face {
+    font-family: Gotham Black;
+    src: url('../font/Gotham-Black.ttf');
+}
 
-        @font-face {
-            font-family: 思源黑体Heavy;
-            src: url('font/SourceHanSansCN-Heavy.otf');
-        }
+@font-face {
+    font-family: 思源黑体Heavy;
+    src: url('../font/SourceHanSansCN-Heavy.otf');
+}
 
-        @font-face {
-            font-family: 思源黑体Bold;
-            src: url('font/SourceHanSansCN-Bold.otf');
-        }
+@font-face {
+    font-family: 思源黑体Bold;
+    src: url('../font/SourceHanSansCN-Bold.otf');
+}
 
-        @font-face {
-            font-family: 思源黑体Normal;
-            src: url('font/SourceHanSansCN-Normal.otf');
-        }
+@font-face {
+    font-family: 思源黑体Normal;
+    src: url('../font/SourceHanSansCN-Normal.otf');
+}
 
 button.add_courseItem{
     width:100%;
