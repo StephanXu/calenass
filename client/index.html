@@ -15,7 +15,7 @@
     <script src="plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 
     <link href="plugins/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="plugins/buttons.css" />
 
@@ -26,23 +26,42 @@
 
 </head>
 
-<body>
+<body style="background: #181818">
 
     <div class="container" id="app" style="background: #181818">
-        <div class="row">
+        <!-- <div class="row">
             <div class="container" style="position:relative;height:300px;background: linear-gradient(to bottom, #3D3D3D, #181818);">
                 <p style="position:absolute;left:17px;bottom:30px;color: #fff;font-family: Gotham Black;font-size:48px">Calenass</p>
                 <p style="position:absolute;left:20px;bottom:10px;color:#fbfbfb;font-family: 思源黑体Normal;font-size:18px">轻松解决课程表日程</p>
             </div>
-
-        </div>
+        </div> -->
         <div class="row">
-            <div class="container">
-                <hr style="background-color:#282828;height: 1px;border: none">
-                </hr>
+            <div class="container" style="position:relative;height:280px;background: linear-gradient(to bottom, #3D3D3D, #181818);">
+                <p style="position:absolute;color: #fff;font-family: Gotham Black;font-size:21px;padding-top:10px">Calenass</p>
+                <!-- <p style="position:absolute;right:0px;color:#fbfbfb;font-family: 思源黑体Normal;font-size:12px">轻松解决课程表日程</p> -->
+                <p style="position:absolute;left:20px;bottom:30px;color: #fff;font-family: Gotham Black;font-size:48px">{{caption}}</p>
+                <div class="container-fluid" style="position:absolute;bottom:0px;left:0px;margin-bottom:-18px">
+                    <ul class="nav nav-pills">
+                        <li role="presentation" id="menu_home" :class="menu_choose==0?'active':''" v-on:click="menu_change(0,'Home')"><a
+                                href="#">设置</a></li>
+                        <li role="presentation" id="menu_courses" :class="menu_choose==1?'active':''" v-on:click="menu_change(1,'Courses')"><a
+                                href="#">课程</a></li>
+                        <li role="presentation" id="menu_setting" :class="menu_choose==2?'active':''" v-on:click="menu_change(2,'Settings')"><a
+                                href="#">设置</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
+
+
+
         <div class="row">
+            <div class="container">
+                <hr />
+            </div>
+        </div>
+
+        <div class="row" v-show="menu_choose==1">
             <div class="col-md-offset-3 col-md-6">
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default" v-for="(coursesItem,index) in courses_sort">
@@ -131,6 +150,78 @@
                 </div>
             </div>
         </div>
+
+        <!-- <div class="row">
+            <div class="container">
+                <hr />
+                <button class="button button-large button-plain button-border button-circle"><i class="fa fa-cog"></i></button>
+            </div>
+        </div> -->
+
+        <div class="row" v-show="menu_choose==2">
+            <div class="container">
+                <form>
+                    <p class="setting-part">基本设置</p>
+                    <hr />
+
+                    <div class="form-group">
+                        <label for="set_calendar_name" class="control-label setting-form-label">日历名称：</label>
+                        <input type="text" class="form-control setting-form-input" id="set_calendar_name" placeholder="课表"
+                            v-model="all_configs.conf.calendarConfig.name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="set_calendar_name" class="control-label setting-form-label">第一周开始日期：</label>
+                        <input type="text" class="form-control setting-form-input" id="set_calendar_name" placeholder="2018-09-03"
+                            v-model="all_configs.conf.weekConfig.first_week">
+                    </div>
+
+                    <p class="setting-part">课程设置</p>
+                    <hr />
+
+                    <div class="panel-group" id="course_setting_list" role="tablist" aria-multiselectable="true">
+                        <div v-for="(classtimes,index) in all_configs.conf.classTimes" class="panel panel-default">
+                            <div class="panel-heading" role="tab" :id="'course_time_'+index">
+                                <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#course_setting_list" :href="'#course_time_collapse'+index"
+                                        aria-expanded="true" :aria-controls="'course_time_collapse'+index">
+                                        {{classtimes.index}}
+                                    </a>
+                                </h4>
+                            </div>
+                            <div :id="'course_time_collapse'+index" class="panel-collapse collapse" role="tabpanel"
+                                :aria-labelledby="'course_time_heading'+index">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label for="set_begin_time" class="control-label setting-form-label">时间标记：</label>
+                                        <input type="text" class="form-control setting-form-input" id="set_begin_time"
+                                            placeholder="第一二节">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="set_begin_time" class="control-label setting-form-label">开始时间：</label>
+                                        <input type="text" class="form-control setting-form-input" id="set_begin_time"
+                                            placeholder="08:00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="set_end_time" class="control-label setting-form-label">结束时间：</label>
+                                        <input type="text" class="form-control setting-form-input" id="set_end_time"
+                                            placeholder="09:50">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="container" style="padding-top:2em;color:#a0a0a0;font-family: 思源黑体Normal">
+                <p class="text-center">
+                    Copyright 2018 徐梓涵 all rights reserved.
+                </p>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -142,6 +233,18 @@
                 courses: [],
                 showItemEdit: -1,
                 form_tip: "",
+                menu_choose: 1,
+
+                caption: 'Courses',
+
+                add_courseInfo: {
+                    name: '',
+                    time: '',
+                    wkday: '',
+                    week: '',
+                    pos: '',
+                    more: '',
+                },
             },
             computed: {
                 courses_sort: function () {
@@ -205,11 +308,16 @@
 
                     this.showItemEdit = -1;
                 },
+
+                menu_change: function (choose, cap) {
+                    this.menu_choose = choose;
+                    this.caption = cap;
+                },
             }
         });
-        var all_configs = JSON.parse(document.cookie);
-        vm.all_configs = all_configs;
-        var configs = all_configs.conf;
+        // var all_configs = JSON.parse(document.cookie);
+        // vm.all_configs = all_configs;
+        // var configs = all_configs.conf;
 
         $(function () {
 
@@ -217,8 +325,10 @@
                 //  for (item in data) {
                 //  courses.push(data[item]);
                 // }
-                //document.cookie = JSON.stringify(data);
-                //console.log(document.cookie);
+                var all_configs = data;
+                vm.all_configs = all_configs;
+                var configs = all_configs.conf;
+                console.log(all_configs);
             });
         })
 

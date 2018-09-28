@@ -125,6 +125,16 @@ a:focus {
     src: url('../font/SourceHanSansCN-Normal.otf');
 }
 
+@font-face{
+    font-family: 思源黑体Light;
+    src: url('../font/SourceHanSansCN-Light.otf');
+}
+
+@font-face{
+    font-family: 思源黑体ExtraLight;
+    src: url('../font/SourceHanSansCN-ExtraLight.otf');
+}
+
 button.add_courseItem{
     width:100%;
 
@@ -144,4 +154,73 @@ label.labelForm{
 }
 .ItemEditFade-enter, .ItemEditFade-leave-to {
     opacity: 0;
+}
+
+hr {
+    background-color:#282828;
+    height: 1px;
+    border: none
+}
+
+a.copyright-text{
+    width: 100%;
+    color: #fbfbfb;
+    font-size:1em;
+}
+
+.nav>li>a:focus, .nav>li>a:hover{
+    background-color: transparent; 
+    font-family: 思源黑体Normal;
+    color: #999999;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
+    background-color: transparent;
+    font-family:思源黑体Normal;
+    color: #ffffff;
+
+}
+
+.nav-pills>li>a{
+    background-color: transparent; 
+    font-family: 思源黑体Normal;
+    color: #999999;
+}
+
+p.setting-part{
+    color:#fbfbfb;
+    font-family:思源黑体Bold;
+    font-size:1.2em;
+    margin-bottom:-10px;
+    padding-top:20px;
+}
+
+label.setting-form-label{
+    color:#a0a0a0;
+    font-family: 思源黑体Light;
+}
+
+input.setting-form-input{
+    background-color: #333333;
+    color: #ffffff;
+    border-radius: 0px;
+    border-color: #333;
+    font-family: 思源黑体Light;
+}
+
+#course_setting_list .panel-default{
+    background: #181818;
+    border-radius: 0px;
+    border: none;
+}
+
+#course_setting_list .panel-heading{
+    background: #181818;
+    color:#FBFBFB;
+    border-bottom: 1px solid #383838;
+    font-family: 思源黑体Normal;
+}
+
+#course_setting_list .panel-body{
+    border:none;
 }
