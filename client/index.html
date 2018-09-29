@@ -43,7 +43,7 @@
                 <div class="container-fluid" style="position:absolute;bottom:0px;left:0px;margin-bottom:-18px">
                     <ul class="nav nav-pills">
                         <li role="presentation" id="menu_home" :class="menu_choose==0?'active':''" v-on:click="menu_change(0,'Home')"><a
-                                href="#">设置</a></li>
+                                href="#">首页</a></li>
                         <li role="presentation" id="menu_courses" :class="menu_choose==1?'active':''" v-on:click="menu_change(1,'Courses')"><a
                                 href="#">课程</a></li>
                         <li role="presentation" id="menu_setting" :class="menu_choose==2?'active':''" v-on:click="menu_change(2,'Settings')"><a
@@ -135,15 +135,84 @@
                                                 </div>
                                                 <p v-if="form_tip.length>0">{{form_tip}}</p>
                                                 <div>
-                                                    <a type="button" class="col-xs-6 button button-action button-block"
+                                                    <a type="button" class="col-xs-6 button button-action button-block add_course_form_add_btn"
                                                         v-on:click="addCourseItem">添加</a>
-                                                    <a type="button" class="col-xs-6 button button-block" v-on:click="showItemEdit = -1;">取消</a>
+                                                    <a type="button" class="col-xs-6 button button-block add_course_form_cancel_btn"
+                                                        v-on:click="showItemEdit = -1;">取消</a>
                                                 </div>
                                             </form>
                                             <br />
                                         </div>
                                     </transition>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="panel-group" id="add_courses" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="add_course_heading">
+                            <h4 class="panel-title text-center">
+                                <a role="button" data-toggle="collapse" data-parent="#add_courses" href="#add_course_collapse"
+                                    aria-expanded="true" aria-controls="'add_course_collapse" class="button button-large button-plain button-border button-circle">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="add_course_collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="add_course_heading">
+                            <form>
+                                <div class="form_group">
+                                    <label for="input_new_course_name" class="control-label setting-form-label">课程名称：</label>
+                                    <input type="text" class="form-control setting-form-input" id="input_new_course_name"
+                                        v-model="new_course.name">
+                                </div>
+                                <div class="form_group">
+                                    <label for="input_new_courseTime" class="control-label setting-form-label">上课时间：</label>
+                                    <select id="input_new_courseTime" class="form-control setting-form-input" v-model="new_course.time">
+                                        <option v-for="ct_item in all_configs.conf.classTimes">
+                                            {{ct_item.index}}
+                                        </option>
+                                    </select>
+                                    <!-- <input type="text" class="form-control" id="input_courseTime"
+                                                placeholder="第一二节"> -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="input_new_courseWkd" class="control-label setting-form-label">上课日：</label>
+                                    <select id="input_new_courseWkd" class="form-control setting-form-input" v-model="new_course.wkday">
+                                        <option value="星期一">星期一</option>
+                                        <option value="星期二">星期二</option>
+                                        <option value="星期三">星期三</option>
+                                        <option value="星期四">星期四</option>
+                                        <option value="星期五">星期五</option>
+                                        <option value="星期六">星期六</option>
+                                        <option value="星期日">星期日</option>
+                                    </select>
+                                    <!-- <input type="text" class="form-control" id="input_courseWkd"
+                                                placeholder="星期一"> -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="input_new_courseWeeks" class="control-label setting-form-label">周数：</label>
+                                    <input type="text" class="form-control setting-form-input" id="input_new_courseWeeks"
+                                        placeholder="1-5,7-10" v-model="new_course.week">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input_new_coursePos" class="control-label setting-form-label">上课地点：</label>
+                                    <input type="text" class="form-control setting-form-input" id="input_new_coursePos"
+                                        placeholder="L1234" v-model="new_course.pos">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input_new_courseMore" class="control-label setting-form-label">备注：</label>
+                                    <input type="text" class="form-control setting-form-input" id="input_new_courseMore"
+                                        placeholder="由 张三 老师讲授" v-model="new_course.more">
+                                </div>
+                                <p v-if="new_form_tip.length>0">{{new_form_tip}}</p>
+                            </form>
+
+                            <div class="panel-body">
+                                <a class="button button-block button-action button-border button-pill" style="color:#fbfbfb;font-family:思源黑体Bold;"
+                                    v-on:click="addNewCourse">添加</a>
                             </div>
                         </div>
                     </div>
@@ -208,16 +277,18 @@
                                             v-model="all_configs.conf.classTimes[index].end_time">
                                     </div>
 
-                                    <a class="button button-block button-caution button-border button-pill" style="color:#fbfbfb;font-family:思源黑体Bold;" v-on:click="all_configs.conf.classTimes.splice(index,1);">移除</a>
+                                    <a class="button button-block button-caution button-border button-pill" style="color:#fbfbfb;font-family:思源黑体Bold;"
+                                        v-on:click="all_configs.conf.classTimes.splice(index,1);">移除</a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <a class="button button-block button-plain button-pill" style="color:#181818;font-family:思源黑体Bold;" v-on:click="add_course_time();">添加</a>
-                
+                    <a class="button button-block button-plain button-pill" style="color:#181818;font-family:思源黑体Bold;"
+                        v-on:click="add_course_time();">添加</a>
+
                     <p class="setting-part">高级设置</p>
-                    <hr/>
+                    <hr />
 
                     <div class="form-group">
                         <label for="set_calendar_name" class="control-label setting-form-label">时区：</label>
@@ -225,6 +296,7 @@
                             v-model="all_configs.conf.calendarConfig.timezone">
                     </div>
                 </form>
+
             </div>
         </div>
 
@@ -251,6 +323,16 @@
                 caption: 'Courses',
 
                 course_setting_active: -1,
+
+                new_course: {
+                    name: '',
+                    time: '',
+                    wkday: '',
+                    week: '',
+                    pos: '',
+                    more: '',
+                },
+                new_form_tip: '',
             },
             computed: {
                 courses_sort: function () {
@@ -273,22 +355,7 @@
 
             },
             methods: {
-                addCourseItem: function (event) {
-                    var courseInfo = new Object();
-                    courseInfo.name = document.getElementById('input_courseAlias').value;
-                    courseInfo.time = document.getElementById('input_courseTime').value;
-                    courseInfo.wkday = document.getElementById('input_courseWkd').value;
-                    courseInfo.week = document.getElementById('input_courseWeeks').value;
-                    courseInfo.pos = document.getElementById('input_coursePos').value;
-                    courseInfo.more = document.getElementById('input_courseMore').value;
-
-                    //check arguments 
-
-                    if (courseInfo.name.length < 1 || courseInfo.week.length < 1) {
-                        this.form_tip = '信息填写错误';
-                        return;
-                    }
-
+                add_course: function (courseInfo) {
                     try {
                         var wk = new Array();
                         var arrWeeksGroup = courseInfo.week.split(',');
@@ -315,12 +382,43 @@
                     this.showItemEdit = -1;
                 },
 
+
+                addCourseItem: function (event) {
+                    var courseInfo = new Object();
+                    courseInfo.name = document.getElementById('input_courseAlias').value;
+                    courseInfo.time = document.getElementById('input_courseTime').value;
+                    courseInfo.wkday = document.getElementById('input_courseWkd').value;
+                    courseInfo.week = document.getElementById('input_courseWeeks').value;
+                    courseInfo.pos = document.getElementById('input_coursePos').value;
+                    courseInfo.more = document.getElementById('input_courseMore').value;
+
+                    //check arguments 
+
+                    if (courseInfo.name.length < 1 || courseInfo.week.length < 1) {
+                        this.form_tip = '信息填写错误';
+                        return;
+                    }
+
+                    this.add_course(courseInfo);
+                },
+
+                addNewCourse: function (event) {
+                    if (this.new_course.name.length < 1 || this.new_course.week.length < 1 || this.new_course.time.length < 1 || this.new_course.wkday.length < 1) {
+                        this.new_form_tip = '信息填写错误';
+                        return;
+                    }
+                    this.add_course(this.new_course);
+
+                    var acc = document.getElementById('add_course_collapse');
+                    acc.setAttribute('class', 'panel-collapse collapse');
+                },
+
                 menu_change: function (choose, cap) {
                     this.menu_choose = choose;
                     this.caption = cap;
                 },
 
-                add_course_time: function (){
+                add_course_time: function () {
                     this.all_configs.conf.classTimes.push({
                         index: '第零零节',
                         start_time: '08:00',

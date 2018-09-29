@@ -178,7 +178,8 @@ a.copyright-text{
     background-color: transparent;
     font-family:思源黑体Normal;
     color: #ffffff;
-
+    border-bottom: 2px solid #3296b7;
+    border-radius: 0px;
 }
 
 .nav-pills>li>a{
@@ -200,7 +201,7 @@ label.setting-form-label{
     font-family: 思源黑体Light;
 }
 
-input.setting-form-input{
+input,select,.setting-form-input{
     background-color: #333333;
     color: #ffffff;
     border-radius: 0px;
@@ -223,4 +224,34 @@ input.setting-form-input{
 
 #course_setting_list .panel-body{
     border:none;
+}
+
+
+#add_courses .panel-default{
+    background: #181818;
+    border-radius: 0px;
+    border: none;
+}
+
+#add_courses .panel-heading{
+    background: #181818;
+    color:#FBFBFB;
+    border-bottom: 1px solid #383838;
+    font-family: 思源黑体Normal;
+}
+
+#add_courses .panel-body{
+    border:none;
+}
+
+a.add_course_form_add_btn{
+    border-bottom-left-radius: 50px;
+    border-top-left-radius: 50px;
+    font-family: 思源黑体Normal;
+}
+
+a.add_course_form_cancel_btn{
+    border-bottom-right-radius: 50px;
+    border-top-right-radius: 50px;
+    font-family: 思源黑体Normal;
 }
