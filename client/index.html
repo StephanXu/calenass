@@ -176,7 +176,7 @@
                             v-model="all_configs.conf.weekConfig.first_week">
                     </div>
 
-                    <p class="setting-part">课程设置</p>
+                    <p class="setting-part">课程时间设置</p>
                     <hr />
 
                     <div class="panel-group" id="course_setting_list" role="tablist" aria-multiselectable="true">
@@ -184,8 +184,8 @@
                             <div class="panel-heading" role="tab" :id="'course_time_'+index">
                                 <h4 class="panel-title">
                                     <a role="button" data-toggle="collapse" data-parent="#course_setting_list" :href="'#course_time_collapse'+index"
-                                        aria-expanded="true" :aria-controls="'course_time_collapse'+index">
-                                        {{classtimes.index}}
+                                        v-on:click="course_setting_active=index;" aria-expanded="true" :aria-controls="'course_time_collapse'+index">
+                                        {{ classtimes.index }}
                                     </a>
                                 </h4>
                             </div>
@@ -195,21 +195,34 @@
                                     <div class="form-group">
                                         <label for="set_begin_time" class="control-label setting-form-label">时间标记：</label>
                                         <input type="text" class="form-control setting-form-input" id="set_begin_time"
-                                            placeholder="第一二节">
+                                            v-model="all_configs.conf.classTimes[index].index">
                                     </div>
                                     <div class="form-group">
                                         <label for="set_begin_time" class="control-label setting-form-label">开始时间：</label>
                                         <input type="text" class="form-control setting-form-input" id="set_begin_time"
-                                            placeholder="08:00">
+                                            v-model="all_configs.conf.classTimes[index].start_time">
                                     </div>
                                     <div class="form-group">
                                         <label for="set_end_time" class="control-label setting-form-label">结束时间：</label>
                                         <input type="text" class="form-control setting-form-input" id="set_end_time"
-                                            placeholder="09:50">
+                                            v-model="all_configs.conf.classTimes[index].end_time">
                                     </div>
+
+                                    <a class="button button-block button-caution button-border button-pill" style="color:#fbfbfb;font-family:思源黑体Bold;" v-on:click="all_configs.conf.classTimes.splice(index,1);">移除</a>
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <a class="button button-block button-plain button-pill" style="color:#181818;font-family:思源黑体Bold;" v-on:click="add_course_time();">添加</a>
+                
+                    <p class="setting-part">高级设置</p>
+                    <hr/>
+
+                    <div class="form-group">
+                        <label for="set_calendar_name" class="control-label setting-form-label">时区：</label>
+                        <input type="text" class="form-control setting-form-input" id="set_calendar_name" placeholder="Asia/Shanghai"
+                            v-model="all_configs.conf.calendarConfig.timezone">
                     </div>
                 </form>
             </div>
@@ -237,14 +250,7 @@
 
                 caption: 'Courses',
 
-                add_courseInfo: {
-                    name: '',
-                    time: '',
-                    wkday: '',
-                    week: '',
-                    pos: '',
-                    more: '',
-                },
+                course_setting_active: -1,
             },
             computed: {
                 courses_sort: function () {
@@ -313,6 +319,14 @@
                     this.menu_choose = choose;
                     this.caption = cap;
                 },
+
+                add_course_time: function (){
+                    this.all_configs.conf.classTimes.push({
+                        index: '第零零节',
+                        start_time: '08:00',
+                        end_time: '09:50'
+                    });
+                }
             }
         });
         // var all_configs = JSON.parse(document.cookie);
