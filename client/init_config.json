@@ -1,0 +1,15 @@
+{
+    "conf": {
+        "calendarConfig": {
+            "name": "课表",
+            "timezone": "Asia/Shanghai"
+        },
+        "classTimes": [
+        ],
+        "weekConfig": {
+            "first_week": "2018-09-01"
+        }
+    },
+    "courses": [
+    ]
+}

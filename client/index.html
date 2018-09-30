@@ -28,16 +28,24 @@
 
 <body style="background: #181818">
 
-    <div class="container" id="app" style="background: #181818">
+    <div class="container-fluid" id="app" style="background: #181818">
         <!-- <div class="row">
             <div class="container" style="position:relative;height:300px;background: linear-gradient(to bottom, #3D3D3D, #181818);">
                 <p style="position:absolute;left:17px;bottom:30px;color: #fff;font-family: Gotham Black;font-size:48px">Calenass</p>
                 <p style="position:absolute;left:20px;bottom:10px;color:#fbfbfb;font-family: 思源黑体Normal;font-size:18px">轻松解决课程表日程</p>
             </div>
         </div> -->
-        <div class="row">
-            <div class="container" style="position:relative;height:280px;background: linear-gradient(to bottom, #3D3D3D, #181818);">
-                <p style="position:absolute;color: #fff;font-family: Gotham Black;font-size:21px;padding-top:10px">Calenass</p>
+
+
+        <div class="row" style="-webkit-user-select:none">
+            <a class="control_btn shutdown_btn text-center"><i class="fa fa-times"></i></a>
+            <a class="control_btn maximize_btn text-center"><i class="fa fa-window-maximize"></i></a>
+            <a class="control_btn minimize_btn text-center"><i class="fa fa-window-minimize"></i></a>
+
+            <div class="container-fluid" style="position:relative;height:280px;background: linear-gradient(to bottom, #3D3D3D, #181818); ">
+                <p style="position:absolute;color: #fff;font-family: Gotham Black;font-size:21px;padding-top:10px; -webkit-app-region: drag">Calenass</p>
+
+
                 <!-- <p style="position:absolute;right:0px;color:#fbfbfb;font-family: 思源黑体Normal;font-size:12px">轻松解决课程表日程</p> -->
                 <p style="position:absolute;left:20px;bottom:30px;color: #fff;font-family: Gotham Black;font-size:48px">{{caption}}</p>
                 <div class="container-fluid" style="position:absolute;bottom:0px;left:0px;margin-bottom:-18px">
@@ -56,13 +64,14 @@
 
 
         <div class="row">
-            <div class="container">
+            <div class="container-fluid">
                 <hr />
             </div>
         </div>
 
         <div class="row" v-show="menu_choose==1">
-            <div class="col-md-offset-3 col-md-6">
+            <!-- <div class="col-md-offset-3 col-md-6"> -->
+            <div class="col-md-12">
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default" v-for="(coursesItem,index) in courses_sort">
                         <div class="panel-heading" role="tab" :id="'courseItem'+index">
@@ -75,11 +84,11 @@
                         </div>
                         <div :id="'collapse'+index" class="panel-collapse collapse" role="tabpanel" :aria-labelledby="'courseItem'+index">
                             <div class="panel-body">
-                                <div v-for="sub in coursesItem.c">
-                                    <p>在第<a v-for="wkday in sub.week" style="color:#ffffff">{{wkday}} </a>周的 {{
-                                        sub.wkday }}<br />
-                                        <a style="color:#ffffff">{{ sub.time }} 于 {{ sub.pos }}</a><br />
-                                        <a style="color:#ffffff">{{sub.more}}</a>
+                                <div v-for="sub in coursesItem.c" @click="remove_course(sub.index);">
+                                    <p>在第<a v-for="wkday in sub.o.week" style="color:#ffffff">{{ wkday }} </a>周的 {{
+                                        sub.o.wkday }}<br />
+                                        <a style="color:#ffffff">{{ sub.o.time }} 于 {{ sub.o.pos }}</a><br />
+                                        <a style="color:#ffffff">{{ sub.o.more }}</a>
                                     </p>
                                 </div>
                                 <div>
@@ -149,6 +158,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- </div> -->
             </div>
             <div class="container">
                 <div class="panel-group" id="add_courses" role="tablist" aria-multiselectable="true">
@@ -308,144 +318,7 @@
             </div>
         </div>
     </div>
-
-    <script>
-
-        var vm = new Vue({
-            el: '#app',
-            data: {
-                all_configs: new Object(),
-                courses: [],
-                showItemEdit: -1,
-                form_tip: "",
-                menu_choose: 1,
-
-                caption: 'Courses',
-
-                course_setting_active: -1,
-
-                new_course: {
-                    name: '',
-                    time: '',
-                    wkday: '',
-                    week: '',
-                    pos: '',
-                    more: '',
-                },
-                new_form_tip: '',
-            },
-            computed: {
-                courses_sort: function () {
-                    this.courses = this.all_configs.courses;
-                    var filter_course = [];
-                    for (course in this.courses) {
-                        var flag_exist = false;
-                        for (item in filter_course) {
-                            if (filter_course[item].alias === this.courses[course].name) {
-                                filter_course[item].c.push(this.courses[course]);
-                                flag_exist = true;
-                            }
-                        }
-                        if (!flag_exist) {
-                            filter_course.push({ alias: this.courses[course].name, c: [this.courses[course]] });
-                        }
-                    }
-                    return filter_course;
-                },
-
-            },
-            methods: {
-                add_course: function (courseInfo) {
-                    try {
-                        var wk = new Array();
-                        var arrWeeksGroup = courseInfo.week.split(',');
-                        for (i in arrWeeksGroup) {
-                            if (arrWeeksGroup[i].indexOf('-') > -1) {
-                                var beginNum = eval(arrWeeksGroup[i].split('-')[0]);
-                                var endNum = eval(arrWeeksGroup[i].split('-')[1]);
-                                for (var n = beginNum; n <= endNum; ++n) {
-                                    wk.push(n);
-                                }
-                            } else {
-                                wk.push(eval(arrWeeksGroup[i]));
-                            }
-                        }
-                    } catch (err) {
-                        this.form_tip = '周数错误';
-                        return;
-                    }
-
-                    courseInfo.week = wk;
-
-                    this.courses.push(courseInfo);
-
-                    this.showItemEdit = -1;
-                },
-
-
-                addCourseItem: function (event) {
-                    var courseInfo = new Object();
-                    courseInfo.name = document.getElementById('input_courseAlias').value;
-                    courseInfo.time = document.getElementById('input_courseTime').value;
-                    courseInfo.wkday = document.getElementById('input_courseWkd').value;
-                    courseInfo.week = document.getElementById('input_courseWeeks').value;
-                    courseInfo.pos = document.getElementById('input_coursePos').value;
-                    courseInfo.more = document.getElementById('input_courseMore').value;
-
-                    //check arguments 
-
-                    if (courseInfo.name.length < 1 || courseInfo.week.length < 1) {
-                        this.form_tip = '信息填写错误';
-                        return;
-                    }
-
-                    this.add_course(courseInfo);
-                },
-
-                addNewCourse: function (event) {
-                    if (this.new_course.name.length < 1 || this.new_course.week.length < 1 || this.new_course.time.length < 1 || this.new_course.wkday.length < 1) {
-                        this.new_form_tip = '信息填写错误';
-                        return;
-                    }
-                    this.add_course(this.new_course);
-
-                    var acc = document.getElementById('add_course_collapse');
-                    acc.setAttribute('class', 'panel-collapse collapse');
-                },
-
-                menu_change: function (choose, cap) {
-                    this.menu_choose = choose;
-                    this.caption = cap;
-                },
-
-                add_course_time: function () {
-                    this.all_configs.conf.classTimes.push({
-                        index: '第零零节',
-                        start_time: '08:00',
-                        end_time: '09:50'
-                    });
-                }
-            }
-        });
-        // var all_configs = JSON.parse(document.cookie);
-        // vm.all_configs = all_configs;
-        // var configs = all_configs.conf;
-
-        $(function () {
-
-            $.getJSON('all_configs.json', function (data) {
-                //  for (item in data) {
-                //  courses.push(data[item]);
-                // }
-                var all_configs = data;
-                vm.all_configs = all_configs;
-                var configs = all_configs.conf;
-                console.log(all_configs);
-            });
-        })
-
-
-    </script>
+    <script src="js/rend.js"></script>
 
 
 </body>

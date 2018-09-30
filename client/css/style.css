@@ -255,3 +255,83 @@ a.add_course_form_cancel_btn{
     border-top-right-radius: 50px;
     font-family: 思源黑体Normal;
 }
+
+.control_btn{
+    color: rgb(255, 255, 255);
+    position: relative;
+    float: right;
+    top: 0px;
+    width: 45px;
+    height:30px;
+    line-height:30px;
+    font-size: 1.1em;
+    z-index:999;
+    transition:0.5s;
+}
+
+.control_btn:hover{
+    color: rgb(255, 255, 255);
+    position: relative;
+    float: right;
+    right: 0px;
+    top: 0px;
+    width: 45px;
+    height:30px;
+    line-height:30px;
+    z-index:999;
+    font-size: 1.1em;
+    transition:0.5s;
+}
+
+.shutdown_btn{
+    background-color: #181818;
+    right: 0px;
+}
+
+.shutdown_btn:hover{
+    background: #cd1a2b;
+    right:0px;
+}
+
+.maximize_btn{
+    background-color: #181818;
+    right: 0px;
+    font-size:0.9em;
+}
+
+.maximize_btn:hover{
+    background: #535353;
+    right:0px;
+    font-size:0.9em;
+}
+
+.minimize_btn{
+    background-color: #181818;
+    right: 0px;
+    font-size:0.9em;  
+}
+
+.minimize_btn:hover{
+    background: #535353;
+    right:0px;
+    font-size:0.9em;
+}
+
+::-webkit-scrollbar {
+    width: 15px;
+    height: 1px;
+}
+::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    /* border-radius: 10px; */
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: #535353;
+}
+::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    /* border-radius: 10px; */
+    background: #181818;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background: #a0a0a0;
+}
