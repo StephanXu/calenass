@@ -1,3 +1,5 @@
+const { ipcRenderer } = require('electron');
+
 var vm = new Vue({
     el: '#app',
     data: {
@@ -70,6 +72,8 @@ var vm = new Vue({
             this.courses.push(courseInfo);
 
             this.showItemEdit = -1;
+
+            this.save_settings(false);
         },
 
         //add a course from the form inside categories
@@ -104,6 +108,7 @@ var vm = new Vue({
             acc.setAttribute('class', 'panel-collapse collapse');
         },
 
+        //response remove event
         remove_course: function (idx) {
             this.courses.splice(idx, 1);
         },
@@ -121,41 +126,43 @@ var vm = new Vue({
                 start_time: '08:00',
                 end_time: '09:50'
             });
-        }
+        },
 
-    }
+        control_btn: function (btn_id) {
+            // ipcRenderer.on('asynchronous-reply', (event, arg) => {
+            //     alert("web2" + arg);// prints "pong"  在electron中web page里的console方法不起作用，因此使用alert作为测试方法
+            // })
+            ipcRenderer.send('msg_control_btn', btn_id) // prints "pong"   
+        },
+
+    },
+    created: function () {
+        //get config
+        try {
+            var all_configs = JSON.parse(ipcRenderer.sendSync('msg_get_configs', ''));
+
+            if (!('conf' in all_configs && 'courses' in all_configs)) {
+                throw 'err';
+            } else if (!('calendarConfig' in all_configs.conf || 'classTimes' in all_configs.conf || 'weekConfig' in all_configs.conf)) {
+                throw 'err';
+            }
+            this.all_configs = all_configs;
+            var configs = all_configs.conf;
+        }
+        catch (err) {
+            var all_configs = JSON.parse(ipcRenderer.sendSync('msg_rebuild_configs', ''));
+            this.all_configs = all_configs;
+            var configs = all_configs.conf;
+        }
+    },
+    updated: function(){
+        ipcRenderer.send('msg_save_configs', JSON.stringify(this.all_configs));
+    },
 });
 
-// function init_config_struct() {
-//     return ('{"conf": {"calendarConfig": {"name": "课表","timezone": "Asia/Shanghai"},"classTimes": [],"weekConfig": {"first_week": "2018-09-01"}},"courses": []}');
-// }
 
-// if (document.cookie.length < 1) {
-//     document.cookie = init_config_struct();
-// }
-
-// try {
-//     var all_configs = JSON.parse(document.cookie);
-// } catch (err) {
-//     console.log(err);
-//     document.cookie = init_config_struct();
-//     var all_configs = JSON.parse(document.cookie);
-// }
-// console.log('conf' in all_configs);
-
-// vm.all_configs = all_configs;
-// var configs = all_configs.conf;
-
-$(function () {
-
-    $.getJSON('all_configs.json', function (data) {
-        //  for (item in data) {
-        //  courses.push(data[item]);
-        // }
-
-        var all_configs = data;
-        vm.all_configs = all_configs;
-        var configs = all_configs.conf;
-        console.log(all_configs);
-    });
+ipcRenderer.on('msg_save_status', (event, arg) => {
+    if (arg === 'fail') {
+        alert('保存设置失败');
+    }
 })

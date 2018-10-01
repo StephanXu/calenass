@@ -38,9 +38,9 @@
 
 
         <div class="row" style="-webkit-user-select:none">
-            <a class="control_btn shutdown_btn text-center"><i class="fa fa-times"></i></a>
-            <a class="control_btn maximize_btn text-center"><i class="fa fa-window-maximize"></i></a>
-            <a class="control_btn minimize_btn text-center"><i class="fa fa-window-minimize"></i></a>
+            <a class="control_btn shutdown_btn text-center" @click="control_btn('shutdown');"><i class="fa fa-times"></i></a>
+            <a class="control_btn maximize_btn text-center" @click="control_btn('max');"><i class="fa fa-window-maximize"></i></a>
+            <a class="control_btn minimize_btn text-center" @click="control_btn('mini')"><i class="fa fa-window-minimize"></i></a>
 
             <div class="container-fluid" style="position:relative;height:280px;background: linear-gradient(to bottom, #3D3D3D, #181818); ">
                 <p style="position:absolute;color: #fff;font-family: Gotham Black;font-size:21px;padding-top:10px; -webkit-app-region: drag">Calenass</p>
@@ -305,6 +305,10 @@
                         <input type="text" class="form-control setting-form-input" id="set_calendar_name" placeholder="Asia/Shanghai"
                             v-model="all_configs.conf.calendarConfig.timezone">
                     </div>
+
+                    <!-- <hr/>
+                    <a class="button button-block button-action button-border button-pill" style="color:#fbfbfb;font-family:思源黑体Bold;"
+                        v-on:click="save_settings(false);">保存</a> -->
                 </form>
 
             </div>
@@ -312,6 +316,7 @@
 
         <div class="row">
             <div class="container" style="padding-top:2em;color:#a0a0a0;font-family: 思源黑体Normal">
+                <hr/>
                 <p class="text-center">
                     Copyright 2018 徐梓涵 all rights reserved.
                 </p>

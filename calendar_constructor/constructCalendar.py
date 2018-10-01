@@ -4,9 +4,54 @@ import pytz
 import myutil
 import datetime
 
-def constructCalendar(courses, configs, out_filename):
+#courses: courses list
+#configs: config object
+
+#courses structure
+# {
+#     "name": "高等数学A1",
+#     "time": "第三四节",
+#     "wkday": "星期一",
+#     "week": [
+#         2,
+#         3,
+#         4,
+#         5,
+#         8,
+#         9,
+#         10,
+#         12,
+#         13,
+#         14,
+#         15,
+#         16
+#     ],
+#     "pos": "L3202",
+#     "more": "阮正顺"
+# },
+
+#config structure
+# {
+#     "calendarConfig":{
+#         "name":"课表",
+#         "timezone":"Asia/Shanghai"
+#     },
+#     "classTimes": [
+#         {
+#             "index":"第一二节",
+#             "start_time":"08:00",
+#             "end_time":"09:50"
+#         }
+#     ],
+#     "weekConfig": {
+#         "first_week":"2018-09-03",
+#         "total_week":19
+#     }
+# }
+
+def constructCalendar(courses, configs):
     # begin to construct event
-    print('Creating the Calendar...')
+    # print('Creating the Calendar...')
 
     calendar = icalendar.Calendar()
     calendar.add('prodid', '-StephanXu Calendar-mrxzh.com-')
@@ -36,12 +81,13 @@ def constructCalendar(courses, configs, out_filename):
             event.add('dtstamp', start_time)
             if len(course['pos'])>1:
                 event.add('location', course['pos'])
-            if len(course['lecturer'])>1:
-                event.add('description', '由 %s 老师' % (course['lecturer']))
+            if len(course['more'])>1:
+                event.add('description', '%s' % (course['more']))
             calendar.add_component(event)
 
-    print('Success!')
-    icsfile = open(out_filename, 'wb')
-    icsfile.write(calendar.to_ical())
-    icsfile.close()
+    # print('Success!')
+    return calendar.to_ical()
+    # icsfile = open(out_filename, 'wb')
+    # icsfile.write(calendar.to_ical())
+    # icsfile.close()
 

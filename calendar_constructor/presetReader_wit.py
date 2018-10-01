@@ -3,11 +3,11 @@ import json
 import datetime
 import re
 import sys
-import classIntoCalendar
+import constructCalendar
 
 #argv[1]:workbook name
-#argv[3]:manually config string
 #argv[2]:config json filename
+#argv[3]:manually config string
 def main(argv):
     workbook = xlrd.open_workbook(argv[1])  # open workbook
     sheets = workbook.sheet_names()  # get all sheets
@@ -64,13 +64,17 @@ def main(argv):
                 course['week'] = courseWeeks
                 try:
                     course['pos'] = courseArr[2]
-                    course['lecturer'] = courseArr[3]
+                    course['more'] = courseArr[3]
                 except IndexError:
                     course['pos'] = ''
-                    course['lecturer'] = ''
+                    course['more'] = ''
                 courses.append(course)
-    
-    classIntoCalendar.constructCalendar(courses,configs,'coursesCalendar.ics')
+
+    #write file
+    icsfile_content = constructCalendar.constructCalendar(courses,configs)
+    icsfile = open('coursesCalendar.ics', 'wb')
+    icsfile.write(icsfile_content)
+    icsfile.close()
 
 
 if __name__ == '__main__':
