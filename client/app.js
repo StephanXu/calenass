@@ -16,7 +16,6 @@ function createWindow() {
         width: 960,
         height: 720,
         frame: false,
-
     });
 
     // mainWindow.openDevTools({ mode: 'bottom' });
@@ -83,7 +82,7 @@ ipcMain.on('msg_save_configs', (event, arg) => {
 });
 
 ipcMain.on('msg_rebuild_configs', (event, arg) => {
-    let init_json_content = fs.readFileSync('./client/init_config.json', 'utf-8');
+    let init_json_content = fs.readFileSync('./exresource/init_config.json', 'utf-8');
     fs.writeFileSync('./user_data/user_configs.json', init_json_content);
     data = init_json_content;
     event.returnValue = data;
@@ -95,7 +94,7 @@ ipcMain.on('msg_get_configs', (event, arg) => {
         data = fs.readFileSync('./user_data/user_configs.json', 'utf-8');
     } catch (err) {
         console.log(err);
-        let init_json_content = fs.readFileSync('./client/init_config.json', 'utf-8');
+        let init_json_content = fs.readFileSync('./exresource/init_config.json', 'utf-8');
         fs.writeFileSync('./user_data/user_configs.json', init_json_content);
         data = init_json_content;
     }

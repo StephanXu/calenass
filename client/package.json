@@ -1,9 +1,9 @@
 {
-    "name":"Calenass",
-    "version":"0.0.1",
-    "main":"app.js",
+    "name": "Calenass",
+    "version": "0.0.1",
+    "main": "app.js",
     "scripts": {
         "start": "chcp 65001 && node .",
-        "packager": "electron-packager . Calenass --all --out ../ClientBuild --asar --overwrite --app-version=0.0.1 --electron-version=1.4.13"
-    } 
+        "packager": "electron-packager . Calenass --all --out ../ClientBuild --asar --overwrite --app-version=0.0.1 --electron-version=1.4.13 --ignore=exresource/ --extra-resource=exresource/ --ignore=user_data/ --extra-resource=user_data/"
+    }
 }
