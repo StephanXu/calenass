@@ -7,9 +7,9 @@ var vm = new Vue({
         courses: [],
         showItemEdit: -1,
         form_tip: "",
-        menu_choose: 1,
+        menu_choose: 0,
 
-        caption: 'Courses',
+        caption: 'Home',
 
         course_setting_active: -1,
 
@@ -22,6 +22,14 @@ var vm = new Vue({
             more: '',
         },
         new_form_tip: '',
+
+        msg_box: {
+            label: '',
+            content: '',
+            btn_text: '',
+            type: '',
+        },
+
     },
     computed: {
         //arrange all courses for listing
@@ -43,6 +51,22 @@ var vm = new Vue({
             return filter_course;
         },
 
+        over_days: function () {
+            var date0 = this.all_configs.conf.weekConfig.first_week + ' 00:00:00';
+            var date1 = date0.replace(/\-/g, "/");
+            var date2 = new Date();
+            var date3 = date2.getTime() - new Date(date1).getTime();
+            var days = Math.floor(date3 / (24 * 3600 * 1000));
+            return days;
+        },
+
+        current_version: function () {
+            return ipcRenderer.sendSync('msg_get_version');
+        },
+
+        load_status: function () {
+            return document.readyState;
+        }
     },
     methods: {
 
@@ -50,6 +74,7 @@ var vm = new Vue({
         add_course: function (courseInfo) {
             try {
                 var wk = new Array();
+                courseInfo.week = courseInfo.week.replace('，',',');
                 var arrWeeksGroup = courseInfo.week.split(',');
                 for (i in arrWeeksGroup) {
                     if (arrWeeksGroup[i].indexOf('-') > -1) {
@@ -110,7 +135,21 @@ var vm = new Vue({
 
         //response remove event
         remove_course: function (idx) {
-            this.courses.splice(idx, 1);
+
+            this.msgbox('警告', '是否真的要删除在 ' + this.courses[idx].wkday + ' ' + this.courses[idx].time + ' 上课的' + this.courses[idx].name,
+                {
+                    yes: {
+                        caption: '是', callback: () => {
+                            this.courses.splice(idx, 1);
+                        }
+                    },
+                    no: {
+                        caption: '否', callback: () => {
+                            //do nothing
+                        }
+                    }
+                }, 'yesorno');
+
         },
 
         //response menu
@@ -132,9 +171,92 @@ var vm = new Vue({
             // ipcRenderer.on('asynchronous-reply', (event, arg) => {
             //     alert("web2" + arg);// prints "pong"  在electron中web page里的console方法不起作用，因此使用alert作为测试方法
             // })
-            ipcRenderer.send('msg_control_btn', btn_id) // prints "pong"   
+            ipcRenderer.send('msg_control_btn', btn_id); // prints "pong"   
         },
 
+        buildCalendar: function (event) {
+            $('#wait_build').modal('show');
+
+            var datastr = new Buffer((JSON.stringify(this.all_configs))).toString('base64');
+            var msg_func = this.msgbox;
+            $.post('https://ca.mrxzh.com/', { data: datastr }, function (result) {
+                if (result === '0') {
+                    $('#wait_build').modal('hide');
+                    msg_func('错误', '日历生成错误');
+                    return;
+                }
+                var calendarData = new Buffer(result, 'base64').toString('utf-8');
+                ipcRenderer.send('msg_build_calendar', calendarData);
+            });
+        },
+
+        import_configs: function (event) {
+            var ret = ipcRenderer.sendSync('msg_import_configs', '');
+            if (ret === 'fail') {
+                this.msgbox('错误', '导入错误');
+                return;
+            } else if (ret === 'nofile') {
+                console.log('no file there');
+                return;
+            } else if (ret === 'invalid') {
+                this.msgbox('错误', '导入文件残缺或不规范');
+                return;
+            }
+
+            console.log(ret);
+
+            var all_configs = JSON.parse(ipcRenderer.sendSync('msg_get_configs', ''));
+            this.all_configs = all_configs;
+            var configs = all_configs.conf;
+        },
+
+        export_configs: function (event) {
+            var ret = ipcRenderer.sendSync('msg_export_configs', JSON.stringify(this.all_configs));
+            if (ret === 'fail') {
+                this.msgbox('错误', '导出错误');
+            }
+        },
+
+        //type: tips,yesorno
+        //when type=='yesorno' btn_text structure is:
+        /*
+        {
+            yes: {
+                caption: '是', callback: () => {
+                    //do something
+                }
+            },
+            no: {
+                caption: '否', callback: () => {
+                    //do something
+                }
+            }
+        }
+        */
+        msgbox: function (label, content, btn_text = '确定', type = 'tips') {
+            this.msg_box.label = label;
+            this.msg_box.content = content;
+            this.msg_box.btn_text = btn_text;
+            this.msg_box.type = type;
+            if (type === 'yesorno') {
+                this.msg_choose_yes = btn_text.yes.callback;
+                this.msg_choose_no = btn_text.no.callback;
+            }
+            $('#msg_box').modal('show');
+        },
+
+        msg_choose_yes: function () {
+            ;
+        },
+
+        msg_choose_no: function () {
+            ;
+        },
+
+
+        open_url: function (url) {
+            ipcRenderer.send('msg_open_url', url);
+        }
     },
     created: function () {
         //get config
@@ -154,15 +276,51 @@ var vm = new Vue({
             this.all_configs = all_configs;
             var configs = all_configs.conf;
         }
+
+        $('#msg_box').modal({
+            keyboard: true,
+            show: false,
+        });
+
+        const choose_yes_backup = this.msg_choose_yes;
+        const choose_no_backup = this.msg_choose_no;
+
+        $('#myModal').on('hidden.bs.modal', function (e) {
+            this.msg_choose_yes = choose_yes_backup;
+            this.msg_choose_no = choose_no_backup;
+        });
+
+        $('#wait_build').modal({
+            keyboard: false,
+            show: false,
+        });
     },
-    updated: function(){
+    updated: function () {
         ipcRenderer.send('msg_save_configs', JSON.stringify(this.all_configs));
     },
 });
 
-
 ipcRenderer.on('msg_save_status', (event, arg) => {
     if (arg === 'fail') {
-        alert('保存设置失败');
+        vm.msgbox('错误', '保存设置失败');
     }
-})
+});
+
+ipcRenderer.on('msg_build_status', (event, arg) => {
+    $('#wait_build').modal('hide');
+
+    if (arg === 'fail') {
+        vm.msgbox('错误', '创建日历失败');
+    }
+});
+
+ipcRenderer.on('msg_first_time',(event,arg)=>{
+    $('#welcome_tip').modal({
+        keyboard:false,
+        show:true,
+    });
+});
+
+window.addEventListener("load", function () {
+    $('#curtain').addClass('curtain-out');
+}, false);

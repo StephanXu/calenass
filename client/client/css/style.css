@@ -1,3 +1,7 @@
+[v-cloak] {
+    display: none;
+}
+
 a:hover,
 a:focus {
     text-decoration: none;
@@ -106,7 +110,7 @@ a:focus {
 }
 
 @font-face {
-    font-family: Gotham Black;
+    font-family: Gotham_Black;
     src: url('../font/Gotham-Black.ttf');
 }
 
@@ -133,6 +137,11 @@ a:focus {
 @font-face{
     font-family: 思源黑体ExtraLight;
     src: url('../font/SourceHanSansCN-ExtraLight.otf');
+}
+
+@font-face{
+    font-family: DIN_BlackItalicAlt;
+    src:url('../font/DIN-BlackItalicAlt.otf');
 }
 
 button.add_courseItem{
@@ -337,4 +346,115 @@ a.add_course_form_cancel_btn{
 } */
 ::-webkit-scrollbar-thumb:hover{
     background: #a0a0a0;
+}
+
+.borad_number{
+    color:#fff;
+    font-family: DIN_BlackItalicAlt;
+    font-size:9em;
+    margin-top: -40px;
+}
+
+.action_btn{
+    margin-bottom:10px;
+    font-family: 思源黑体Normal;
+}
+
+.about_text{
+    font-family: 思源黑体Normal;
+    color:#a0a0a0;
+}
+
+.msg_dialog{
+    border-radius: 0px;
+}
+
+.msg_header{
+    background: #282828;
+    color: #fff;
+    font-family: 思源黑体Normal;
+    border-bottom: 2px solid #404040;
+    font-size: 1.1em;
+    padding:9px;
+}
+
+.msg_body{
+    background: #181818;
+    color:#b3b3b3;
+    font-family: 思源黑体Light;
+}
+
+.msg_footer{
+    background: #282828;
+    border-top:none;
+    padding: 10px;
+    text-align: center;
+}
+
+.msg_btn{
+    font-family: 思源黑体Normal;
+    background-color:#1db954;
+    border-color:#1db954;
+}
+
+.msg_btn:hover{
+    font-family: 思源黑体Normal;
+    background-color:#1ed760;
+    border-color:#1ed760;
+}
+
+.msg_no_btn{
+    font-family: 思源黑体Normal;
+    margin-left:20px;
+}
+
+
+.slide-fade-enter-active {
+    transition: all .3s ease;
+}
+.slide-fade-leave-active {
+    transition: all .1s ease;
+}
+.slide-fade-enter{
+    transform: translateX(10px);
+    opacity: 0;
+}
+.slide-fade-leave-to{
+    transform: translateX(-10px);
+    opacity: 0;
+}
+
+.page_caption{
+    position:absolute;
+    left:20px;
+    bottom:30px;
+    color: #fff;
+    font-family: Gotham_Black;
+    font-size:48px
+}
+
+.curtain{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #181818;
+}
+
+.curtain-out{
+    opacity: 0;
+    z-index: -1040;
+    transition: all 1s ease;
+}
+
+#intro_content h2,h3,h4,h5{
+    font-family: 思源黑体Bold;
+    color:#fbfbfb;
+    line-height: 2em;
+}
+
+#intro_content p{
+    line-height: 2em;
 }
