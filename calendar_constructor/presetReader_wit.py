@@ -7,7 +7,7 @@ import constructCalendar
 
 #argv[1]:workbook name
 #argv[2]:config json filename
-#argv[3]:manually config string
+#argv[3]:output config
 def main(argv):
     workbook = xlrd.open_workbook(argv[1])  # open workbook
     sheets = workbook.sheet_names()  # get all sheets
@@ -71,10 +71,19 @@ def main(argv):
                 courses.append(course)
 
     #write file
-    icsfile_content = constructCalendar.constructCalendar(courses,configs)
-    icsfile = open('coursesCalendar.ics', 'wb')
-    icsfile.write(icsfile_content)
-    icsfile.close()
+    if (argv[3]=='ics'):    #output file
+        icsfile_content = constructCalendar.constructCalendar(courses,configs)
+        icsfile = open('coursesCalendar.ics', 'wb')
+        icsfile.write(icsfile_content)
+        icsfile.close()
+    elif (argv[3]=='json'): #output json configuration
+        confobj={
+            'conf':configs,
+            'courses':courses
+        };
+        conffile = open('generate\\expert_config.json','w',encoding='UTF-8')
+        json.dump(confobj,conffile,ensure_ascii=False)
+        conffile.close()
 
 
 if __name__ == '__main__':
