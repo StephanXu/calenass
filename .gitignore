@@ -1,4 +1,4 @@
 *.pyc
 ClientBuild/*
-calenass_web/node_modules/*
-calenass_web/.idea
+web_server/node_modules/*
+web_server/.idea
