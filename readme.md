@@ -30,9 +30,7 @@ Still testing...
 
 Still testing...
 
-## Advance
-
-### Dependencies
+## Dependencies
 
 Here are some dependencies.
 
@@ -42,11 +40,11 @@ Here are some dependencies.
 - Other python packages (All in `constructor\requirements.txt`)
 
 
-### Command mode
+## Command mode
 
 If you have python environment, or have some preset. You can use command mode.
 
-#### Preset:
+### Preset:
 
 If you want to use preset to build your file(`iCal` file or `JSON` file for importing configuration into the client). Use file `constructor\calenass_preset.py`.
 
@@ -59,13 +57,13 @@ Params:
 - output mode: 'ics' or 'json', depends on what kind of file do you want to get;
 - output filename:  the file that you want to build;
 
-#### Pure command:
+### Pure command:
 
 The pure command `constructor\ical_constructor.py` is made for the web requiries. But you still can call it yourself. It only receives one param that a base64-encoded JSON string contains all configuration. You can export all configuration through the client. And if you have a preset, you can also export `JSON` file through preset(more details please read [Preset](#preset)). About the configuration file, please read [Configuration structure](#Configuration+structure)
 
 **Usage: python ical_constructor.py \<All configs\>**
 
-### Configuration structure
+## Configuration structure
 
 Whole configuration structure:
 ```
