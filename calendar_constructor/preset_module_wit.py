@@ -5,10 +5,8 @@ import re
 import sys
 import constructCalendar
 
-#argv[1]:workbook name
-#argv[2]:config json filename
-#argv[3]:output config
-def main(argv):
+
+def preset_main(argv):
     workbook = xlrd.open_workbook(argv[1])  # open workbook
     sheets = workbook.sheet_names()  # get all sheets
     sheet = workbook.sheet_by_index(0)  # get the first sheet
@@ -30,7 +28,8 @@ def main(argv):
         print('\tclass name:', ctc['index'])
         print('\t\tstarts at:', datetime.datetime.strptime(
             ctc['start_time'], '%H:%M'))
-        print('\t\tends at:', datetime.datetime.strptime(ctc['end_time'], '%H:%M'))
+        print('\t\tends at:', datetime.datetime.strptime(
+            ctc['end_time'], '%H:%M'))
 
     print('\tfirst week:', datetime.datetime.strptime(
         configs['weekConfig']['first_week'], '%Y-%m-%d'))
@@ -56,9 +55,10 @@ def main(argv):
                     if (shrWk.find('-') != -1):
                         courseWeeks = courseWeeks + \
                             list(range(int(shrWk.split('-')[0]),
-                                    int(shrWk.split('-')[1])+1))
+                                       int(shrWk.split('-')[1])+1))
                     elif (shrWk.find('/') != -1):
-                        courseWeeks = list(range(1,configs['weekConfig']['total_week']+1))
+                        courseWeeks = list(
+                            range(1, configs['weekConfig']['total_week']+1))
                     else:
                         courseWeeks.append(int(shrWk))
                 course['week'] = courseWeeks
@@ -69,22 +69,31 @@ def main(argv):
                     course['pos'] = ''
                     course['more'] = ''
                 courses.append(course)
+    print('\t|alias\t|week day\t|time\t|position\t|lector\t|')
+    for course in courses:
+        print('\t|%s\t|%s\t|%s\t|%s\t|%s\t|' % (
+            course['name'], course['wkday'], course['time'], course['pos'], course['more']))
 
-    #write file
-    if (argv[3]=='ics'):    #output file
-        icsfile_content = constructCalendar.constructCalendar(courses,configs)
-        icsfile = open('coursesCalendar.ics', 'wb')
+    print('Building file...')
+    # write file
+    if (argv[3] == 'ics'):  # output file
+        icsfile_content = constructCalendar.constructCalendar(courses, configs)
+        icsfile = open(argv[4], 'wb')
         icsfile.write(icsfile_content)
         icsfile.close()
-    elif (argv[3]=='json'): #output json configuration
-        confobj={
-            'conf':configs,
-            'courses':courses
-        };
-        conffile = open('generate\\expert_config.json','w',encoding='UTF-8')
-        json.dump(confobj,conffile,ensure_ascii=False)
+        print('Build %s Success!\n\tFile:%s' % (argv[3],argv[4]))
+    elif (argv[3] == 'json'):  # output json configuration
+        confobj = {
+            'conf': configs,
+            'courses': courses
+        }
+        conffile = open(argv[4], 'w', encoding='UTF-8')
+        json.dump(confobj, conffile, ensure_ascii=False)
         conffile.close()
+        print('Build %s Success!\n\tFile:%s' % (argv[3], argv[4]))
+    else:
+        print('Build error: output config cannot be recognize')
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    preset_main(sys.argv)
