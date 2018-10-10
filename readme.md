@@ -8,6 +8,10 @@ This program help students import their courses' timetable into the calendar app
 - Build Module: use the command to build `ics`(iCal) file for importing to calendar app or `json` file to import configuration to Calenass Client program. 
 - Web server: For across platforms. I place the "build module" on the web server.
 
+[Author's Blog](https://www.mrxzh.com/)
+
+[Project's Introduction](https://www.mrxzh.com/calenass-qingsongguanlikechengricheng/)
+
 ## Client
 
 This client is platforms-across. It support Windows, Linux, MacOS. Here is install url:
