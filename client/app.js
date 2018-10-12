@@ -132,9 +132,13 @@ ipcMain.on('msg_build_calendar', (event, arg) => {
                 { name: 'iCal File', extensions: ['ics'] }
             ]
         });
+        if (save_path == undefined) {
+            throw 'empty-path';
+        }
         fs.writeFileSync(save_path, arg);
     }
     catch (err) {
+        if (err === 'empty-path') return;//avoid cancel tips
         event.sender.send('msg_build_status', 'fail');
         return;
     }
@@ -149,6 +153,11 @@ ipcMain.on('msg_import_configs', (event, arg) => {
         ],
         properties: ['openFile'],
     });
+
+    if (open_path == undefined) {
+        event.returnValue = 'user-canceled';
+        return;
+    }
 
     let imp_file_content = '';
     try {
@@ -185,9 +194,15 @@ ipcMain.on('msg_export_configs', (event, arg) => {
                 { name: 'Config File', extensions: ['json', 'txt'] }
             ]
         });
+
+        if (save_path == undefined) {
+            throw 'empty-path';
+        }
+
         fs.writeFileSync(save_path, arg);
     }
     catch (err) {
+        if (err === 'empty-path') return;
         event.returnValue = 'fail';
         return;
     }

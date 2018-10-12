@@ -196,14 +196,16 @@ var vm = new Vue({
                 this.msgbox('错误', '导入错误');
                 return;
             } else if (ret === 'nofile') {
-                console.log('no file there');
+                // console.log('no file there');
                 return;
             } else if (ret === 'invalid') {
                 this.msgbox('错误', '导入文件残缺或不规范');
                 return;
+            }else if (ret === 'user-canceled'){
+                return;
             }
 
-            console.log(ret);
+            // console.log(ret);
 
             var all_configs = JSON.parse(ipcRenderer.sendSync('msg_get_configs', ''));
             this.all_configs = all_configs;
