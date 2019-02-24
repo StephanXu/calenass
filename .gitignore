@@ -2,3 +2,4 @@
 ClientBuild/*
 web_server/node_modules/*
 web_server/.idea
+client/dist

@@ -94,7 +94,8 @@ var vm = new Vue({
 
             courseInfo.week = wk;
 
-            this.courses.push(courseInfo);
+            // deep copy
+            this.courses.push(JSON.parse(JSON.stringify(courseInfo)));
 
             this.showItemEdit = -1;
 
