@@ -280,6 +280,11 @@ var vm = new Vue({
             var configs = all_configs.conf;
         }
 
+        // add alarm config if alarm config is undefined
+        if (!('alarm' in all_configs.conf.calendarConfig)) {
+            this.all_configs.conf.calendarConfig.alarm = 30;
+        }
+
         $('#msg_box').modal({
             keyboard: true,
             show: false,

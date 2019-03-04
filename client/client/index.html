@@ -367,9 +367,15 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="set_calendar_name" class="control-label setting-form-label">第一周开始日期：</label>
-                            <input type="text" class="form-control setting-form-input" id="set_calendar_name"
+                            <label for="set_first_week_date" class="control-label setting-form-label">第一周开始日期：</label>
+                            <input type="text" class="form-control setting-form-input" id="set_first_week_date"
                                 placeholder="2018-09-03" v-model="all_configs.conf.weekConfig.first_week">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="set_alarm_time" class="control_label setting-form-label">提醒（上课前几分钟，0为不提醒）</label>
+                            <input type="text" class="form-control setting-form-input" id="set_alarm_time" placeholder="30"
+                                v-model="all_configs.conf.calendarConfig.alarm">
                         </div>
 
                         <p class="setting-part">课程时间设置</p>
@@ -531,7 +537,7 @@
                     <div class="modal-body msg_body" id="intro_content">
                         <h1 class="text-center" style="font-family: Gotham_Black;font-size:5em;color:#fff">Calenass</h1>
                         <p class="text-center" style="font-family: 思源黑体Bold;font-size:2em;color:#fff">使用指南</p>
-                        <hr/>
+                        <hr />
                         <h4 class="text-center">介绍</h4>
                         <p>Calenass能够很方便地为你管理你的课程表。它能够创建<strong>ics</strong>文件，从而将课程安排导入到你的日历当中。方便你进行其他的管理。同时，它还支持导出/导入设置，从而让你更方便地共享你的课程安排。并且，我们同时提供了Windows，MacOS，Linux和Darwin的适用版本。满足不同设备的需求。</p>
                         <p><img class="img-responsive" src='guide/主页.png' alt='主页' /></p>
@@ -566,14 +572,14 @@
                         <p>非常感谢在我之前的项目中捐赠的朋友们，虽然没能把你们一一列出来，但是你们的帮助仍然给了我很多动力去完善和更新这些项目。</p>
                         <p>如果你愿意支持这项项目，你可以在“首页”版面下找到“捐赠”按钮，并完成捐赠。</p>
                         <h4>常见问题</h2>
-                        <p>Q：如何拖动Calendar的窗口？</p>
-                        <p>A：我们将窗口的拖动范围缩小了，按住左上角的小logo即可拖动窗口。</p>
-                        <h4 class="text-center">Bug反馈</h4>
-                        <p>Calenass仍非常年轻，在运行过程中，它可能会出现一些问题。如果你遇到了任何问题，你都可以尝试联系我来解决。非常期待你的反馈：</p>
-                        <blockquote>
-                            <p>邮箱地址：<a href='mailto:xuzihanapple@live.com' target='_blank' class='url'>xuzihanapple@live.com</a></p>
-                            <p>博客地址：<a href='http://www.mrxzh.com' target='_blank' class='url'>www.mrxzh.com</a></p>
-                        </blockquote>
+                            <p>Q：如何拖动Calendar的窗口？</p>
+                            <p>A：我们将窗口的拖动范围缩小了，按住左上角的小logo即可拖动窗口。</p>
+                            <h4 class="text-center">Bug反馈</h4>
+                            <p>Calenass仍非常年轻，在运行过程中，它可能会出现一些问题。如果你遇到了任何问题，你都可以尝试联系我来解决。非常期待你的反馈：</p>
+                            <blockquote>
+                                <p>邮箱地址：<a href='mailto:xuzihanapple@live.com' target='_blank' class='url'>xuzihanapple@live.com</a></p>
+                                <p>博客地址：<a href='http://www.mrxzh.com' target='_blank' class='url'>www.mrxzh.com</a></p>
+                            </blockquote>
                     </div>
                     <div class="modal-footer msg_footer">
                         <button type="button" class="button button-action button-pill button-small msg_btn"
