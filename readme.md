@@ -14,21 +14,9 @@ This program help students import their courses' timetable into the calendar app
 
 ## Client
 
-This client is platforms-across. It support Windows, Linux, MacOS. Here is install url:
+This client is platforms-across. It support Windows, Linux, MacOS.
 
-### Windows:
-
-[64Bit](https://share.weiyun.com/513rbmZ)
-
-[32Bit](https://share.weiyun.com/5VFyTzE)
-
-### Linux:
-
-Still testing...
-
-### MacOS:
-
-Still testing...
+We have already packed for Windows and MacOS. Please check [Release page](https://github.com/StephanXu/calenass/releases])
 
 ## Dependencies
 
@@ -77,7 +65,8 @@ config_object: config structure
 {
     "calendarConfig":{
         "name":"MyClassTimeTable",
-        "timezone":"Asia/Shanghai"
+        "timezone":"Asia/Shanghai",
+        "alarm":"30"
     },
     "classTimes": [
         {
