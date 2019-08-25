@@ -114,7 +114,7 @@ def construct_calendar(courses, configs):
         week_mark_date = datetime.datetime.strptime(
             configs['weekConfig']['first_week'], '%Y-%m-%d') + datetime.timedelta(days=int(week)*7)
         event = icalendar.Event()
-        event.add('summary', '第{0}周'.format(week))
+        event.add('summary', '第{0}周'.format(week+1))
         event.add('uid', uuid.uuid4())
         event.add('dtstart', week_mark_date)
         event.add('dtend', week_mark_date)
