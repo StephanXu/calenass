@@ -28,7 +28,7 @@ import uuid
 #         16
 #     ],
 #     "pos": "L3202",
-#     "more": "阮正顺"
+#     "more": "张三"
 # },
 
 # config structure
@@ -52,20 +52,20 @@ import uuid
 # }
 
 
-def constructCalendar(courses, configs):
+def construct_calendar(courses, configs):
     # begin to construct event
-    # print('Creating the Calendar...')
-
     calendar = icalendar.Calendar()
     calendar.add('prodid', '-StephanXu Calendar-mrxzh.com-')
     calendar.add('version', '2.0')
     calendar.add('X-WR-CALNAME', configs['calendarConfig']['name'])
-
+    max_week = 0
     for course in courses:
         basic_time = datetime.datetime.strptime(
             configs['weekConfig']['first_week'], '%Y-%m-%d') + datetime.timedelta(days=myutil._get_wkday_offset(course['wkday']))
 
         for week in course['week']:
+            if week > max_week:
+                max_week = week
             current_day = basic_time + datetime.timedelta(days=(int(week)-1)*7)
             start_time_off = datetime.datetime.strptime(myutil._get_start_time(
                 configs['classTimes'], course['time']), '%H:%M').timetuple()
@@ -78,10 +78,14 @@ def constructCalendar(courses, configs):
                 datetime.timedelta(hours=end_time_off.tm_hour,
                                    minutes=end_time_off.tm_min)
 
-            start_time = start_time.astimezone(
-                pytz.timezone(configs['calendarConfig']['timezone']))
-            end_time = end_time.astimezone(pytz.timezone(
-                configs['calendarConfig']['timezone']))
+            base_timezone = pytz.timezone(
+                configs['calendarConfig']['timezone'])
+            start_time = base_timezone.localize(start_time)
+            # start_time = start_time.astimezone(
+            #     pytz.timezone(configs['calendarConfig']['timezone']))
+            end_time = base_timezone.localize(end_time)
+            # end_time = end_time.astimezone(pytz.timezone(
+            #     configs['calendarConfig']['timezone']))
 
             event = icalendar.Event()
             event.add('summary', course['name'])
@@ -97,18 +101,23 @@ def constructCalendar(courses, configs):
 
             # set alarm
             if 'alarm' in configs['calendarConfig']:
-                if 0 < eval(configs['calendarConfig']['alarm']):
+                if 0 < eval(str(configs['calendarConfig']['alarm'])):
                     alarm = icalendar.Alarm()
                     alarm.add('action', 'DISPLAY')
                     alarm.add('discription', 'Class reminder')
                     alarm.add('trigger', datetime.timedelta(
-                        minutes=0-eval(configs['calendarConfig']['alarm'])))
+                        minutes=0-eval(str(configs['calendarConfig']['alarm']))))
                     event.add_component(alarm)
 
             calendar.add_component(event)
-
-    # print('Success!')
+    for week in range(0, max_week):
+        week_mark_date = datetime.datetime.strptime(
+            configs['weekConfig']['first_week'], '%Y-%m-%d') + datetime.timedelta(days=int(week)*7)
+        event = icalendar.Event()
+        event.add('summary', '第{0}周'.format(week))
+        event.add('uid', uuid.uuid4())
+        event.add('dtstart', week_mark_date)
+        event.add('dtend', week_mark_date)
+        calendar.add_component(event)
+        pass
     return calendar.to_ical()
-    # icsfile = open(out_filename, 'wb')
-    # icsfile.write(calendar.to_ical())
-    # icsfile.close()

@@ -74,7 +74,7 @@ var vm = new Vue({
         add_course: function (courseInfo) {
             try {
                 var wk = new Array();
-                courseInfo.week = courseInfo.week.replace('，',',');
+                courseInfo.week = courseInfo.week.split('，').join(',')
                 var arrWeeksGroup = courseInfo.week.split(',');
                 for (i in arrWeeksGroup) {
                     if (arrWeeksGroup[i].indexOf('-') > -1) {
@@ -96,10 +96,8 @@ var vm = new Vue({
 
             // deep copy
             this.courses.push(JSON.parse(JSON.stringify(courseInfo)));
-
             this.showItemEdit = -1;
-
-            this.save_settings(false);
+            // this.save_settings(false);
         },
 
         //add a course from the form inside categories
@@ -128,7 +126,14 @@ var vm = new Vue({
                 this.new_form_tip = '信息填写错误';
                 return;
             }
-            this.add_course(this.new_course);
+            var courseInfo = new Object();
+            courseInfo.name = this.new_course.name;
+            courseInfo.time = this.new_course.time
+            courseInfo.wkday = this.new_course.wkday;
+            courseInfo.week = this.new_course.week;
+            courseInfo.pos = this.new_course.pos;
+            courseInfo.more = this.new_course.more;
+            this.add_course(courseInfo);
 
             var acc = document.getElementById('add_course_collapse');
             acc.setAttribute('class', 'panel-collapse collapse');
@@ -177,8 +182,7 @@ var vm = new Vue({
 
         buildCalendar: function (event) {
             $('#wait_build').modal('show');
-
-            var datastr = new Buffer((JSON.stringify(this.all_configs))).toString('base64');
+            var datastr = Buffer.from((JSON.stringify(this.all_configs))).toString('base64');
             var msg_func = this.msgbox;
             $.post('https://ca.mrxzh.com/', { data: datastr }, function (result) {
                 if (result === '0') {
@@ -186,7 +190,7 @@ var vm = new Vue({
                     msg_func('错误', '日历生成错误');
                     return;
                 }
-                var calendarData = new Buffer(result, 'base64').toString('utf-8');
+                var calendarData = Buffer.from(result, 'base64').toString('utf-8');
                 ipcRenderer.send('msg_build_calendar', calendarData);
             });
         },

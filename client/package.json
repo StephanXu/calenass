@@ -6,10 +6,10 @@
         "name": "Stephan Xu"
     },
     "homepage": "https://www.mrxzh.com",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "main": "app.js",
     "scripts": {
-        "start": "chcp 65001 && node .",
+        "start": "electron .",
         "pack": "electron-builder --dir",
         "dist": "electron-builder"
     },
@@ -29,5 +29,10 @@
                 "zip"
             ]
         }
-    }
+    },
+    "devDependencies": {
+        "electron": "^6.0.2",
+        "electron-builder": "^21.2.0"
+    },
+    "dependencies": {}
 }

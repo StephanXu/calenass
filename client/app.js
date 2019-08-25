@@ -34,7 +34,10 @@ function createWindow() {
         height: 720,
         frame: false,
         icon: __dirname + '/client/favicon.ico',
-        backgroundColor: '#181818'
+        backgroundColor: '#181818',
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
 
     // mainWindow.openDevTools({ mode: 'bottom' });
@@ -125,88 +128,80 @@ ipcMain.on('msg_get_configs', (event, arg) => {
 const { dialog } = require('electron');
 
 ipcMain.on('msg_build_calendar', (event, arg) => {
-    try {
-        let save_path = dialog.showSaveDialog({
-            title: '选择日历文件的保存目录',
-            filters: [
-                { name: 'iCal File', extensions: ['ics'] }
-            ]
-        });
-        if (save_path == undefined) {
-            throw 'empty-path';
+    dialog.showSaveDialog({
+        title: '选择日历文件的保存目录',
+        filters: [
+            { name: 'iCal File', extensions: ['ics'] }
+        ]
+    }, (save_path) => {
+        if (save_path.length < 1) {
+            event.sender.send('msg_build_status', 'fail');
+            return;
         }
         fs.writeFileSync(save_path, arg);
-    }
-    catch (err) {
-        if (err === 'empty-path') return;//avoid cancel tips
-        event.sender.send('msg_build_status', 'fail');
-        return;
-    }
+    });
     event.sender.send('msg_build_status', 'suc');
 });
 
 ipcMain.on('msg_import_configs', (event, arg) => {
-    let open_path = dialog.showOpenDialog({
+    dialog.showOpenDialog({
         title: '选择配置文件',
         filters: [
             { name: 'Config File', extensions: ['json'] }
         ],
         properties: ['openFile'],
-    });
-
-    if (open_path == undefined) {
-        event.returnValue = 'user-canceled';
-        return;
-    }
-
-    let imp_file_content = '';
-    try {
-        imp_file_content = fs.readFileSync(open_path[0]);
-    } catch (err) {
-        event.returnValue = 'nofile';
-        return;
-    }
-
-    try {
-        let new_obj = JSON.parse(imp_file_content);
-        if (!('conf' in new_obj && 'courses' in new_obj)) {
-            throw 'err';
-        } else if (!('calendarConfig' in new_obj.conf || 'classTimes' in new_obj.conf || 'weekConfig' in new_obj.conf)) {
-            throw 'err';
+    }, (open_path) => {
+        if (open_path == undefined) {
+            event.returnValue = 'user-canceled';
+            return;
         }
-    } catch (err) {
-        console.log(err);
-        event.returnValue = 'invalid';
-        return;
-    }
 
-    fs.writeFileSync(configPath + '/user_configs.json', imp_file_content);
-    event.returnValue = 'suc';
+        let imp_file_content = '';
+        try {
+            imp_file_content = fs.readFileSync(open_path[0]);
+        } catch (err) {
+            event.returnValue = 'nofile';
+            return;
+        }
 
+        try {
+            let new_obj = JSON.parse(imp_file_content);
+            if (!('conf' in new_obj && 'courses' in new_obj)) {
+                throw 'err';
+            } else if (!('calendarConfig' in new_obj.conf || 'classTimes' in new_obj.conf || 'weekConfig' in new_obj.conf)) {
+                throw 'err';
+            }
+        } catch (err) {
+            console.log(err);
+            event.returnValue = 'invalid';
+            return;
+        }
 
+        fs.writeFileSync(configPath + '/user_configs.json', imp_file_content);
+        event.returnValue = 'suc';
+    });
 });
 
 ipcMain.on('msg_export_configs', (event, arg) => {
-    try {
-        let save_path = dialog.showSaveDialog({
-            title: '选择导出位置',
-            filters: [
-                { name: 'Config File', extensions: ['json', 'txt'] }
-            ]
-        });
-
+    let save_path = dialog.showSaveDialog({
+        title: '选择导出位置',
+        filters: [
+            { name: 'Config File', extensions: ['json', 'txt'] }
+        ]
+    }, (save_path) => {
         if (save_path == undefined) {
-            throw 'empty-path';
+            return;
         }
-
-        fs.writeFileSync(save_path, arg);
-    }
-    catch (err) {
-        if (err === 'empty-path') return;
-        event.returnValue = 'fail';
-        return;
-    }
-    event.returnValue = 'suc';
+        try {
+            fs.writeFileSync(save_path, arg);
+        }
+        catch (err) {
+            if (err === 'empty-path') return;
+            event.returnValue = 'fail';
+            return;
+        }
+        event.returnValue = 'suc';
+    });
 });
 
 const { shell } = require('electron');
