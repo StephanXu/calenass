@@ -184,7 +184,7 @@ var vm = new Vue({
             $('#wait_build').modal('show');
             var datastr = Buffer.from((JSON.stringify(this.all_configs))).toString('base64');
             var msg_func = this.msgbox;
-            $.post('https://ca.mrxzh.com/', { data: datastr }, function (result) {
+            $.post('http://localhost:34600/', { data: datastr }, function (result) {
                 if (result === '0') {
                     $('#wait_build').modal('hide');
                     msg_func('错误', '日历生成错误');

@@ -1,5 +1,9 @@
 // 载入electron模块
 const electron = require("electron");
+const {
+    exec
+} = require('child_process')
+
 // 创建应用程序对象
 const app = electron.app;
 // 创建一个浏览器窗口，主要用来加载HTML页面
@@ -10,6 +14,36 @@ const fs = require('fs');
 let mainWindow;
 
 const configPath = app.getPath('userData');
+
+process.env.NODE_ENV = 'production'
+let cmdStr = '".\\resources\\bin\\generator.exe"'
+let cmdPath = ''
+// 子进程名称
+let workerProcess
+if (process.env.NODE_ENV === 'production') {
+    runExec()
+}
+
+
+function runExec() {
+    // 执行命令行，如果命令不需要路径，或就是项目根目录，则不需要cwd参数：
+    workerProcess = exec(cmdStr, {
+        cwd: cmdPath
+    })
+    // 不受child_process默认的缓冲区大小的使用方法，没参数也要写上{}：workerProcess = exec(cmdStr, {})
+    // 打印正常的后台可执行程序输出
+    workerProcess.stdout.on('data', function (data) {
+        console.log('stdout: ' + data);
+    });
+    // 打印错误的后台可执行程序输出
+    workerProcess.stderr.on('data', function (data) {
+        console.log('stderr: ' + data);
+    });
+    // 退出之后的输出
+    workerProcess.on('close', function (code) {
+        console.log('out code：' + code);
+    })
+}
 
 const initConfig = '{ \
     "conf": {   \

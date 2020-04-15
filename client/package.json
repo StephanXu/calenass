@@ -6,29 +6,32 @@
         "name": "Stephan Xu"
     },
     "homepage": "https://www.mrxzh.com",
-    "version": "0.0.6",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/StephanXu/calenass.git"
+    },
+    "version": "0.0.7",
     "main": "app.js",
     "scripts": {
         "start": "electron .",
         "pack": "electron-builder --dir",
-        "dist": "electron-builder"
+        "dist": "electron-builder --win --x64"
     },
     "build": {
         "appId": "com.Calenass",
-        "mac": {
-            "icon": "fav.png",
-            "category": "public.app-category.utilities",
-            "target": [
-                "dmg"
-            ]
-        },
         "win": {
             "icon": "fav.ico",
             "target": [
                 "nsis",
                 "zip"
             ]
-        }
+        },
+        "extraResources": [
+            {
+                "from": "../constructor/dist/run.exe",
+                "to": "./bin/generator.exe"
+            }
+        ]
     },
     "devDependencies": {
         "electron": "^6.0.2",
